@@ -92,7 +92,7 @@ app.post('/api/persons', (request, response) => {
     number
   }
   phonebook = phonebook.concat(newPerson);
-  response.status(201).json(phonebook);
+  response.status(201).json(newPerson);
 });
 
 const PORT = process.env.PORT || 3001;
