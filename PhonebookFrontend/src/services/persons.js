@@ -3,14 +3,9 @@ import axios from "axios";
 const baseURL = "/api/persons"; // Proxy to backend server
 
 const getAll = async () => {
-  const request = await axios.get(baseURL)
-  const nonExisting = {
-    id: 10000,
-    content: 'This note is not saved to server',
-    important: true,
-  }
-  return request.then(response => response.data.concat(nonExisting))
-}
+  const response = await axios.get(baseURL);
+  return response.data;
+};
 
 const getById = async (id) => {
   const response = await axios.get(`${baseURL}/${id}`);
