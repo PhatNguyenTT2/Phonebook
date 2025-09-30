@@ -2,9 +2,7 @@ const mongoose = require('mongoose');
 
 mongoose.set('strictQuery', false);
 
-const password = process.argv[2];
-const url = `mongodb+srv://fullstack:${password}@cluster0.dcbrknd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-
+const url = process.env.MONGODB_URI;
 console.log('connecting to', url);
 
 mongoose.connect(url)
