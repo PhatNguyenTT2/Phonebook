@@ -22,14 +22,14 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
 
   const [filter, setFilter] = useState('')
-
+  const [notification, setNotification] = useState({ message: null, type: 'success' })
   const addPerson = (event) => {
     event.preventDefault()
 
     if (persons.some(person => person.name === newName) && persons.some(person => person.number === newNumber)) {
-      setErrorMessage(`${newName} is already added to phonebook`)
+      setNotification({ message: `${newName} is already added to phonebook`, type: 'error' })
       setTimeout(() => {
-        setErrorMessage(null)
+        setNotification({ message: null, type: 'success' })
       }, 5000)
       return
     }
@@ -45,15 +45,15 @@ const App = () => {
             setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
             setNewName('')
             setNewNumber('')
-            setErrorMessage(`Updated ${newName}'s number`)
+            setNotification({ message: `Updated ${newName}'s number`, type: 'success' })
             setTimeout(() => {
               setErrorMessage(null)
             }, 5000)
           })
           .catch(error => {
-            setErrorMessage(`Information of '${person.name}' was already been removed from server`)
+            setNotification({ message: `Information of '${person.name}' was already been removed from server`, type: 'error' })
             setTimeout(() => {
-              setErrorMessage(null)
+              setNotification({ message: null, type: 'success' })
             }, 5000)
             setPersons(persons.filter(p => p.id !== person.id))
           })
@@ -73,11 +73,14 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
+        setNotification({ message: `Added ${newName}`, type: 'success' })
+        setTimeout(() => {
+          setNotification({ message: null, type: 'success' })
+        }, 5000)
       })
-    setErrorMessage(`Added ${newName}`)
-    setTimeout(() => {
-      setErrorMessage(null)
-    }, 5000)
+      .catch(error => {
+        setNotification({ message: error.response.data.error, type: 'error' })
+      })
   }
 
   const handleNameChange = (event) => {
@@ -112,7 +115,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={errorMessage} />
+      <Notification notification={notification} />
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
       <h3>Add a new</h3>
       <PersonForm
